@@ -1,7 +1,7 @@
 import React from "react";
 import { FlatList } from "react-native";
 import { connectInfiniteHits } from "react-instantsearch/connectors";
-import Repository from "./Repository";
+import ScenarioCard from "./ScenarioCard";
 import ItemSeparator from "./ItemSeparator";
 
 const Results = connectInfiniteHits(({ hits, hasMore, refine }) => {
@@ -17,7 +17,7 @@ const Results = connectInfiniteHits(({ hits, hasMore, refine }) => {
       onEndReached={onEndReached}
       keyExtractor={(repo) => repo.objectID}
       renderItem={({ item }) => (
-        <Repository
+        <ScenarioCard
           title={item.title}
           subTitle={item.subTitle}
           image={item.image}

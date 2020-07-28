@@ -45,7 +45,7 @@ export default function RegisterScreen() {
           maxLength={255}
           autoCapitalize="none"
           autoCorrect={false}
-          icon="human-child"
+          icon="account"
           placeholder="Username"
         />
         <AppFormPicker
