@@ -9,7 +9,10 @@ export default function ScenarioCard({ title, subTitle, image, onPress }) {
   return (
     <TouchableHighlight underlayColor={colors.light} onPress={onPress}>
       <View style={styles.card}>
-        <Image style={styles.image} source={require("../../assets/heart.jpg")}></Image>
+        <Image
+          style={styles.image}
+          source={require("../../assets/heart.jpg")}
+        ></Image>
         <View style={styles.details}>
           <AppText style={styles.title}>{title}</AppText>
           <AppText style={styles.subTitle}>{subTitle}</AppText>

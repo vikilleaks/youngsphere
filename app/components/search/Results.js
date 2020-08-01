@@ -3,12 +3,17 @@ import { FlatList } from "react-native";
 import { connectInfiniteHits } from "react-instantsearch/connectors";
 import ScenarioCard from "./ScenarioCard";
 import ItemSeparator from "./ItemSeparator";
+import routes from "../navigation/routes";
 
-const Results = connectInfiniteHits(({ hits, hasMore, refine }) => {
+const Results = connectInfiniteHits(({ hits, hasMore, refine, navigation }) => {
   const onEndReached = () => {
     if (hasMore) {
       refine();
     }
+  };
+
+  const handleOnPress = (item) => {
+    navigation.navigate(routes.BROWSER, item);
   };
 
   return (
@@ -21,7 +26,7 @@ const Results = connectInfiniteHits(({ hits, hasMore, refine }) => {
           title={item.title}
           subTitle={item.subTitle}
           image={item.image}
-          onPress={() => console.log(item.title)}
+          onPress={() => handleOnPress(item)}
         />
       )}
       ItemSeparatorComponent={ItemSeparator}

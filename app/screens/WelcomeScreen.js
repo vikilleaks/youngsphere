@@ -1,17 +1,19 @@
 import React from "react";
-import { StyleSheet, Text, View, Button } from "react-native";
+import { StyleSheet, Text, Button } from "react-native";
 import routes from "../components/navigation/routes";
+
+import Screen from "../components/Screen";
 
 export default function WelcomeScreen({ navigation }) {
   return (
-    <View>
+    <Screen>
       <Text>Welcome to Youngsphere</Text>
       <Button title="Login" onPress={() => navigation.navigate(routes.LOGIN)} />
       <Button
         title="Register"
         onPress={() => navigation.navigate(routes.REGISTER)}
       />
-    </View>
+    </Screen>
   );
 }
 

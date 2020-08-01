@@ -10,15 +10,14 @@ const searchClient = algoliasearch(
   "636fe3e8cc33682e9245cd9f4499b6a8"
 );
 
-export default function SearchScreen() {
+export default function SearchScreen({ navigation }) {
   return (
     <View style={styles.container}>
-      <Text style={styles.brandTitle}>Scenario Search</Text>
       <InstantSearch searchClient={searchClient} indexName="Scenario">
         <View style={styles.searchBoxContainer}>
           <SearchBox />
         </View>
-        <Results />
+        <Results navigation={navigation} />
       </InstantSearch>
     </View>
   );

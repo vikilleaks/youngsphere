@@ -2,9 +2,9 @@ import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-import CameraPage from "../camera/CameraPage";
 import AccountScreen from "../../screens/AccountScreen";
-import SearchScreen from "../../screens/SearchScreen";
+import CameraPage from "../camera/CameraPage";
+import ScenarioNavigator from "./ScenarioNavigator";
 
 const Tab = createBottomTabNavigator();
 
@@ -12,7 +12,7 @@ const AppNavigator = () => (
   <Tab.Navigator>
     <Tab.Screen
       name="Search"
-      component={SearchScreen}
+      component={ScenarioNavigator}
       options={{
         tabBarIcon: ({ color, size }) => (
           <MaterialCommunityIcons name="magnify" color={color} size={size} />
