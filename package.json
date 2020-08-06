@@ -32,11 +32,14 @@
     "react-native-reanimated": "~1.9.0",
     "react-native-safe-area-context": "~3.0.7",
     "react-native-screens": "~2.9.0",
+    "react-native-swipe-gestures": "^1.0.5",
     "react-native-vector-icons": "^7.0.0",
     "react-native-web": "~0.11.7",
     "react-native-webview": "9.4.0",
     "react-redux": "^7.2.0",
+    "reanimated-bottom-sheet": "^1.0.0-alpha.20",
     "redux": "^4.0.5",
+    "rn-bottom-drawer": "^1.4.3",
     "yup": "^0.29.1"
   },
   "devDependencies": {
