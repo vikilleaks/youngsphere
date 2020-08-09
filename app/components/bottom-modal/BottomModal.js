@@ -1,56 +1,151 @@
-import React from "react";
-import { StyleSheet, Text, View } from "react-native";
-import BottomSheet from "reanimated-bottom-sheet";
-import Animated from "react-native-reanimated";
-import Constants from "expo-constants";
+import React, { Component } from "react";
+import {
+  StyleSheet,
+  Text,
+  Dimensions,
+  PanResponder,
+  Animated,
+  View,
+} from "react-native";
+import CommentsScreen from "./CommentsScreen";
 import { WebView } from "react-native-webview";
+import Constants from "expo-constants";
+import LikeButton from "./LikeButton";
 
-const Lorem =
-  "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi eget risus eu nulla tristique laoreet sit amet in libero. Nullam sollicitudin malesuada ligula nec interdum. Curabitur sodales hendrerit ante, in fringilla turpis varius vel. Cras suscipit enim tellus, sed placerat neque mollis in. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Mauris diam metus, mattis sed elit et, dapibus congue risus. Vestibulum fermentum velit eget dolor euismod consequat. Sed iaculis, libero eu malesuada hendrerit, orci urna eleifend sem, vitae faucibus tortor nunc ut enim. Aliquam erat volutpat. Vivamus lacus diam, fringilla quis erat non, fermentum tristique nunc. Ut vel ligula vitae metus accumsan auctor. Nam malesuada libero dignissim fringilla suscipit. Donec consectetur dolor nibh, nec consectetur dui lobortis sed. Aenean varius consequat risus vitae volutpat. Nullam malesuada eros id sapien accumsan, ac congue felis ultricies.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi eget risus eu nulla tristique laoreet sit amet in libero. Nullam sollicitudin malesuada ligula nec interdum. Curabitur sodales hendrerit ante, in fringilla turpis varius vel. Cras suscipit enim tellus, sed placerat neque mollis in. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Mauris diam metus, mattis sed elit et, dapibus congue risus. Vestibulum fermentum velit eget dolor euismod consequat. Sed iaculis, libero eu malesuada hendrerit, orci urna eleifend sem, vitae faucibus tortor nunc ut enim. Aliquam erat volutpat. Vivamus lacus diam, fringilla quis erat non, fermentum tristique nunc. Ut vel ligula vitae metus accumsan auctor. Nam malesuada libero dignissim fringilla suscipit. Donec consectetur dolor nibh, nec consectetur dui lobortis sed. Aenean varius consequat risus vitae volutpat. Nullam malesuada eros id sapien accumsan, ac congue felis ultricies.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi eget risus eu nulla tristique laoreet sit amet in libero. Nullam sollicitudin malesuada ligula nec interdum. Curabitur sodales hendrerit ante, in fringilla turpis varius vel. Cras suscipit enim tellus, sed placerat neque mollis in. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Mauris diam metus, mattis sed elit et, dapibus congue risus. Vestibulum fermentum velit eget dolor euismod consequat. Sed iaculis, libero eu malesuada hendrerit, orci urna eleifend sem, vitae faucibus tortor nunc ut enim. Aliquam erat volutpat. Vivamus lacus diam, fringilla quis erat non, fermentum tristique nunc. Ut vel ligula vitae metus accumsan auctor. Nam malesuada libero dignissim fringilla suscipit. Donec consectetur dolor nibh, nec consectetur dui lobortis sed. Aenean varius consequat risus vitae volutpat. Nullam malesuada eros id sapien accumsan, ac congue felis ultricies.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi eget risus eu nulla tristique laoreet sit amet in libero. Nullam sollicitudin malesuada ligula nec interdum. Curabitur sodales hendrerit ante, in fringilla turpis varius vel. Cras suscipit enim tellus, sed placerat neque mollis in. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Mauris diam metus, mattis sed elit et, dapibus congue risus. Vestibulum fermentum velit eget dolor euismod consequat. Sed iaculis, libero eu malesuada hendrerit, orci urna eleifend sem, vitae faucibus tortor nunc ut enim. Aliquam erat volutpat. Vivamus lacus diam, fringilla quis erat non, fermentum tristique nunc. Ut vel ligula vitae metus accumsan auctor. Nam malesuada libero dignissim fringilla suscipit. Donec consectetur dolor nibh, nec consectetur dui lobortis sed. Aenean varius consequat risus vitae volutpat. Nullam malesuada eros id sapien accumsan, ac congue felis ultricies.";
+export default class BottomModal extends Component {
+  constructor(props) {
+    super(props);
 
-export default function BottomModal() {
-  trans = new Animated.Value(0);
-  const renderHeader = (name) => (
-    <View
-      style={{
-        width: "100%",
-        backgroundColor: "blue",
-        height: 40,
-        borderWidth: 2,
-      }}
-    >
-      <Text>{name}</Text>
-    </View>
-  );
+    const { height, width } = Dimensions.get("screen");
 
-  const renderInner = () => (
-    <View>
-      {renderHeader("one")}
-      <Text style={styles.content}>{Lorem}</Text>
-    </View>
-  );
+    const initialPosition = { x: 0, y: height - 75 };
+    const position = new Animated.ValueXY(initialPosition);
 
-  return (
-    <>
-      <WebView
-        source={{
-          uri:
-            "https://github.com/osdnk/react-native-reanimated-bottom-sheet/blob/master/Example/Test.js",
-        }}
-        style={styles.web}
-      />
-      <BottomSheet
-        contentPosition={trans}
-        snapPoints={[100, 400]}
-        renderContent={renderInner}
-      />
-    </>
-  );
+    const parentResponder = PanResponder.create({
+      onMoveShouldSetPanResponderCapture: (e, gestureState) => {
+        return false;
+      },
+      onStartShouldSetPanResponder: () => false,
+      onMoveShouldSetPanResponder: (e, gestureState) => {
+        if (this.state.toTop) {
+          return gestureState.dy > 6;
+        } else {
+          return gestureState.dy < -6;
+        }
+      },
+      onPanResponderTerminationRequest: () => false,
+      onPanResponderMove: (evt, gestureState) => {
+        let newy = gestureState.dy;
+        if (this.state.toTop && newy < 0) return;
+        if (this.state.toTop) {
+          position.setValue({ x: 0, y: newy });
+        } else {
+          position.setValue({ x: 0, y: initialPosition.y + newy });
+        }
+      },
+      onPanResponderRelease: (evt, gestureState) => {
+        if (this.state.toTop) {
+          if (gestureState.dy > 50) {
+            this.snapToBottom(initialPosition);
+          } else {
+            this.snapToTop();
+          }
+        } else {
+          if (gestureState.dy < -90) {
+            this.snapToTop();
+          } else {
+            this.snapToBottom(initialPosition);
+          }
+        }
+      },
+    });
+
+    this.offset = 0;
+    this.parentResponder = parentResponder;
+    this.state = { position, toTop: false };
+  }
+
+  snapToTop = () => {
+    Animated.timing(this.state.position, {
+      toValue: { x: 0, y: Constants.statusBarHeight },
+      duration: 300,
+      useNativeDriver: false,
+    }).start(() => {});
+    this.setState({ toTop: true });
+  };
+
+  snapToBottom = (initialPosition) => {
+    Animated.timing(this.state.position, {
+      toValue: initialPosition,
+      duration: 150,
+      useNativeDriver: false,
+    }).start(() => {});
+    this.setState({ toTop: false });
+  };
+
+  hasReachedTop({ layoutMeasurement, contentOffset, contentSize }) {
+    return contentOffset.y == 0;
+  }
+
+  render() {
+    const { height } = Dimensions.get("window");
+
+    return (
+      <>
+        <WebView
+          source={{
+            uri: "https://github.com/vikilleaks",
+          }}
+          style={styles.web}
+        />
+        <Animated.View
+          style={[
+            styles.draggable,
+            { height },
+            this.state.position.getLayout(),
+          ]}
+          {...this.parentResponder.panHandlers}
+        >
+          <Text style={styles.dragHandle}>=</Text>
+          <LikeButton />
+          <CommentsScreen />
+        </Animated.View>
+      </>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
-  content: {
-    backgroundColor: "green",
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#F5FCFF",
+  },
+  welcome: {
+    fontSize: 20,
+    textAlign: "center",
+    margin: 10,
+  },
+  instructions: {
+    textAlign: "center",
+    color: "#333333",
+    marginBottom: 5,
+  },
+  draggable: {
+    position: "absolute",
+    right: 0,
+    backgroundColor: "skyblue",
+    alignItems: "center",
+  },
+  dragHandle: {
+    fontSize: 22,
+    color: "#707070",
+    height: 60,
+  },
+  scroll: {
+    paddingLeft: 10,
+    paddingRight: 10,
   },
   web: {
     marginTop: Constants.statusBarHeight,

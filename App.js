@@ -1,5 +1,7 @@
 import React from "react";
 import BottomModal from "./app/components/bottom-modal/BottomModal";
+import CommentsScreen from "./app/components/bottom-modal/CommentsScreen";
+import LikeButton from "./app/components/bottom-modal/LikeButton";
 
 export default function App() {
   return <BottomModal />;
