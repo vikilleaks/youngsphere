@@ -8,7 +8,6 @@ export default function LikeButton() {
   const [likes, setLikes] = useState(0);
 
   const AddLike = () => {
-    console.log("Someone clicked");
     setLikes(likes + 1);
   };
 
@@ -42,7 +41,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 15,
     width: "30%",
-    marginTop: 10,
+    margin: 10,
     flexDirection: "row",
   },
   text: {

@@ -7,10 +7,15 @@ import {
   Animated,
   View,
 } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+
 import CommentsScreen from "./CommentsScreen";
 import { WebView } from "react-native-webview";
 import Constants from "expo-constants";
 import LikeButton from "./LikeButton";
+import AppButton from "../AppButton";
+import QuizNavigator from "../quiz/QuizNavigator";
+import colors from "../../config/colors";
 
 export default class BottomModal extends Component {
   constructor(props) {
@@ -107,7 +112,14 @@ export default class BottomModal extends Component {
           {...this.parentResponder.panHandlers}
         >
           <Text style={styles.dragHandle}>=</Text>
-          <LikeButton />
+          <View style={styles.buttonContainer}>
+            <LikeButton />
+            <AppButton
+              title="Quiz"
+              onPress={() => this.props.navigation.navigate("QuizIndex")}
+              style={styles.button}
+            />
+          </View>
           <CommentsScreen />
         </Animated.View>
       </>
@@ -116,21 +128,24 @@ export default class BottomModal extends Component {
 }
 
 const styles = StyleSheet.create({
+  button: {
+    backgroundColor: colors.primary,
+    borderRadius: 25,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 15,
+    width: "30%",
+    margin: 10,
+    flexDirection: "row",
+  },
+  buttonContainer: {
+    flexDirection: "row",
+  },
   container: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#F5FCFF",
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: "center",
-    margin: 10,
-  },
-  instructions: {
-    textAlign: "center",
-    color: "#333333",
-    marginBottom: 5,
   },
   draggable: {
     position: "absolute",
@@ -143,11 +158,28 @@ const styles = StyleSheet.create({
     color: "#707070",
     height: 60,
   },
+  instructions: {
+    textAlign: "center",
+    color: "#333333",
+    marginBottom: 5,
+  },
   scroll: {
     paddingLeft: 10,
     paddingRight: 10,
   },
+  text: {
+    marginLeft: 5,
+    color: colors.white,
+    fontSize: 18,
+    textTransform: "uppercase",
+    fontWeight: "bold",
+  },
   web: {
     marginTop: Constants.statusBarHeight,
+  },
+  welcome: {
+    fontSize: 20,
+    textAlign: "center",
+    margin: 10,
   },
 });
