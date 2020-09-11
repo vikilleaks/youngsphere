@@ -6,8 +6,8 @@ const ItemSeperator = () => <View style={styles.seperator} />;
 
 const styles = StyleSheet.create({
   seperator: {
-    backgroundColor: colors.medium,
-    height: StyleSheet.hairlineWidth,
+    backgroundColor: colors.light,
+    height: 10,
   },
 });
 

@@ -5,7 +5,12 @@ import Constants from "expo-constants";
 
 export default function BrowserScreen({ route }) {
   const scenario = route.params;
-  return <WebView source={{ uri: scenario.link }} style={styles.web} />;
+  return (
+    <WebView
+      source={{ uri: scenario.attributes.link_to_scenario }}
+      style={styles.web}
+    />
+  );
 }
 
 const styles = StyleSheet.create({
