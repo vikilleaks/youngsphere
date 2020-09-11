@@ -40,6 +40,7 @@
     "reanimated-bottom-sheet": "^1.0.0-alpha.20",
     "redux": "^4.0.5",
     "rn-bottom-drawer": "^1.4.3",
+    "tcomb-form-native": "^0.6.20",
     "yup": "^0.29.1"
   },
   "devDependencies": {
