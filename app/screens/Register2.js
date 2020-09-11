@@ -31,6 +31,7 @@ const userSignup = (values) => {
     myHeaders.append("Content-Type", "application/json");
     var raw = JSON.stringify({
       user: {
+        name: values.username,
         email: values.email,
         password: values.password,
         password_confirmation: values.password,
