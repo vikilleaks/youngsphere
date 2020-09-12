@@ -1,43 +1,130 @@
-import React from "react";
-import algoliasearch from "algoliasearch/lite";
-import { StyleSheet, Text, View } from "react-native";
-import { InstantSearch } from "react-instantsearch/native";
-import SearchBox from "../components/search/SearchBox";
-import Results from "../components/search/Results";
+import React, { Component } from "react";
 
-const searchClient = algoliasearch(
-  "VNLWFBE1TB",
-  "636fe3e8cc33682e9245cd9f4499b6a8"
-);
+import {
+  Text,
+  StyleSheet,
+  View,
+  FlatList,
+  TextInput,
+  ActivityIndicator,
+} from "react-native";
 
-export default function SearchScreen({ navigation }) {
-  return (
-    <View style={styles.container}>
-      <InstantSearch searchClient={searchClient} indexName="Scenario">
-        <View style={styles.searchBoxContainer}>
-          <SearchBox />
+import ScenarioCard from "../components/search/ScenarioCard";
+import ItemSeperator from "../components/search/ItemSeparator";
+import routes from "../components/navigation/routes";
+
+export default class App extends Component {
+  constructor(props) {
+    super(props);
+    //setting default state
+    this.state = { isLoading: true, text: "" };
+    this.arrayholder = [];
+  }
+
+  handleOnPress = (link) => {
+    this.props.navigation.navigate(routes.BOTTOM, { link });
+  };
+
+  componentDidMount() {
+    var myHeaders = new Headers();
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+    };
+    return fetch(
+      "https://youngsphere.herokuapp.com/api/v1/scenarios",
+      requestOptions
+    )
+      .then((response) => response.json())
+      .then((result) => {
+        this.setState(
+          {
+            isLoading: false,
+            dataSource: result.data,
+          },
+          function () {
+            this.arrayholder = result.data;
+          }
+        );
+      })
+      .catch((error) => console.log("error", error));
+  }
+
+  SearchFilterFunction(text) {
+    //passing the inserted text in textinput
+    const newData = this.arrayholder.filter(function (item) {
+      //applying filter for the inserted text in search bar
+      const itemData = item.attributes.title
+        ? item.attributes.title.toUpperCase()
+        : "".toUpperCase();
+      const textData = text.toUpperCase();
+      return itemData.indexOf(textData) > -1;
+    });
+    this.setState({
+      //setting the filtered newData on datasource
+      //After setting the data it will automatically re-render the view
+      dataSource: newData,
+      text: text,
+    });
+  }
+
+  render() {
+    if (this.state.isLoading) {
+      //Loading View while data is loading
+      return (
+        <View style={{ flex: 1, paddingTop: 20 }}>
+          <ActivityIndicator />
         </View>
-        <Results navigation={navigation} />
-      </InstantSearch>
-    </View>
-  );
+      );
+    }
+    return (
+      //ListView to show with textinput used as search bar
+      <View style={styles.viewStyle}>
+        <TextInput
+          style={styles.textInputStyle}
+          onChangeText={(text) => {
+            this.SearchFilterFunction(text);
+          }}
+          value={this.state.text}
+          underlineColorAndroid="transparent"
+          placeholder="Search Here"
+        />
+        <FlatList
+          data={this.state.dataSource}
+          ItemSeparatorComponent={ItemSeperator}
+          renderItem={({ item }) => (
+            <ScenarioCard
+              title={item.attributes.title}
+              subTitle={item.attributes.uploader_name}
+              image={item.attributes.avatar_url}
+              onPress={() =>
+                this.handleOnPress(item.attributes.link_to_scenario)
+              }
+            />
+          )}
+          enableEmptySections={true}
+          style={{ marginTop: 10 }}
+          keyExtractor={(item, index) => index.toString()}
+        />
+      </View>
+    );
+  }
 }
-
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
+  viewStyle: {
     justifyContent: "center",
-    paddingTop: 40,
+    flex: 1,
+    marginTop: 40,
+    padding: 16,
   },
-  brandTitle: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "#333",
+  textStyle: {
+    padding: 10,
   },
-  searchBoxContainer: {
-    width: "100%",
-    flexDirection: "row",
+  textInputStyle: {
+    height: 40,
+    borderWidth: 1,
+    paddingLeft: 10,
+    borderColor: "#009688",
+    backgroundColor: "#FFFFFF",
   },
 });

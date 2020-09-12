@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useContext } from "react";
 import {
   StyleSheet,
   Text,
@@ -7,23 +7,21 @@ import {
   Animated,
   View,
 } from "react-native";
-import { NavigationContainer } from "@react-navigation/native";
 
 import CommentsScreen from "./CommentsScreen";
 import { WebView } from "react-native-webview";
 import Constants from "expo-constants";
 import LikeButton from "./LikeButton";
 import AppButton from "../AppButton";
-import QuizNavigator from "../quiz/QuizNavigator";
 import colors from "../../config/colors";
+import routes from "../navigation/routes";
 
 export default class BottomModal extends Component {
   constructor(props) {
     super(props);
 
     const { height, width } = Dimensions.get("screen");
-
-    const initialPosition = { x: 0, y: height - 75 };
+    const initialPosition = { x: 0, y: height - 125 };
     const position = new Animated.ValueXY(initialPosition);
 
     const parentResponder = PanResponder.create({
@@ -94,12 +92,11 @@ export default class BottomModal extends Component {
 
   render() {
     const { height } = Dimensions.get("window");
-
     return (
       <>
         <WebView
           source={{
-            uri: "https://github.com/vikilleaks",
+            uri: "https://leetcode.com/explore/",
           }}
           style={styles.web}
         />
@@ -116,7 +113,7 @@ export default class BottomModal extends Component {
             <LikeButton />
             <AppButton
               title="Quiz"
-              onPress={() => this.props.navigation.navigate("QuizIndex")}
+              onPress={() => this.props.navigation.navigate(routes.QUIZIDX)}
               style={styles.button}
             />
           </View>

@@ -2,8 +2,7 @@ import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 
 import SearchScreen from "../../screens/SearchScreen";
-import BrowserScreen from "../../screens/BrowserScreen";
-import Search2 from "../../screens/Search2";
+import QuizNavigator from "../quiz/QuizNavigator";
 
 const Stack = createStackNavigator();
 
@@ -11,12 +10,12 @@ const ScenarioNavigator = () => (
   <Stack.Navigator>
     <Stack.Screen
       name="Search"
-      component={Search2}
+      component={SearchScreen}
       options={{ headerShown: false }}
     />
     <Stack.Screen
-      name="Browser"
-      component={BrowserScreen}
+      name="Bottom"
+      component={QuizNavigator}
       options={{ headerShown: false }}
     />
   </Stack.Navigator>

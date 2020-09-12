@@ -6,24 +6,28 @@ import BottomModal from "../bottom-modal/BottomModal";
 
 const Stack = createStackNavigator();
 
-const QuizNavigator = () => (
-  <Stack.Navigator>
-    <Stack.Screen
-      name="BottomModal"
-      component={BottomModal}
-      options={{ headerShown: false }}
-    />
-    <Stack.Screen
-      name="QuizIndex"
-      component={QuizIndex}
-      options={{ headerShown: false }}
-    />
-    <Stack.Screen
-      name="Quiz"
-      component={Quiz}
-      options={{ headerShown: false }}
-    />
-  </Stack.Navigator>
-);
+const QuizNavigator = ({ route }) => {
+  const { link } = route.params;
+  console.log(link);
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="BottomModal"
+        component={BottomModal}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="QuizIndex"
+        component={QuizIndex}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Quiz"
+        component={Quiz}
+        options={{ headerShown: false }}
+      />
+    </Stack.Navigator>
+  );
+};
 
 export default QuizNavigator;

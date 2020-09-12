@@ -23,6 +23,34 @@ const categories = [
   { label: "Class 8", value: 8 },
 ];
 
+const userSignup = (values) => {
+  if (values) {
+    var myHeaders = new Headers();
+    myHeaders.append("contentType", "application/json");
+    myHeaders.append("dataType", "json");
+    myHeaders.append("Content-Type", "application/json");
+    var raw = JSON.stringify({
+      user: {
+        name: values.username,
+        email: values.email,
+        password: values.password,
+        password_confirmation: values.password,
+      },
+    });
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+    };
+    fetch("https://youngsphere.herokuapp.com/api/v1/account", requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+      })
+      .catch((error) => console.log("error", error));
+  }
+};
+
 export default function RegisterScreen() {
   return (
     <Screen style={styles.container}>
@@ -37,7 +65,7 @@ export default function RegisterScreen() {
           email: "",
           password: "",
         }}
-        onSubmit={(values) => console.log(values)}
+        onSubmit={(values) => userSignup(values)}
         validationSchema={validationSchema}
       >
         <AppFormField

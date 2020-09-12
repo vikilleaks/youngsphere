@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Image } from "react-native";
+import { StyleSheet, Image, AsyncStorage, Alert } from "react-native";
 import * as Yup from "yup";
 
 // easy import using index.js
@@ -12,6 +12,40 @@ const validationSchema = Yup.object().shape({
   email: Yup.string().required().email().label("Email"),
   password: Yup.string().required().min(8).label("Password"),
 });
+
+let STORAGE_KEY = "id_token";
+
+const onValueChange = async (item, selectedValue) => {
+  try {
+    await AsyncStorage.setItem(item, selectedValue);
+  } catch (error) {
+    console.log("AsyncStorage error: " + error.message);
+  }
+};
+
+const userLogin = (values) => {
+  if (values) {
+    console.log(values);
+    var myHeaders = new Headers();
+    myHeaders.append("contentType", "application/json");
+    myHeaders.append("dataType", "json");
+    myHeaders.append("Content-Type", "application/json");
+    var raw = JSON.stringify({
+      user: { email: values.email, password: values.password },
+    });
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+    };
+    fetch("https://youngsphere.herokuapp.com/api/v1/sign_in", requestOptions)
+      .then((response) => {
+        console.log(response.headers.get("Authorization"));
+        onValueChange(STORAGE_KEY, response.headers.get("Authorization"));
+      })
+      .catch((error) => console.log("error", error));
+  }
+};
 
 //login page
 export default function LoginScreen() {
@@ -26,7 +60,7 @@ export default function LoginScreen() {
           email: "",
           password: "",
         }}
-        onSubmit={(values) => console.log(values)}
+        onSubmit={(values) => userLogin(values)}
         validationSchema={validationSchema}
       >
         {/* children of AppForm */}
