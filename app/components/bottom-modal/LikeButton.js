@@ -8,7 +8,7 @@ export default function LikeButton() {
   const [likes, setLikes] = useState(0);
 
   const AddLike = () => {
-    setLikes(likes + 1);
+    setLikes((likes + 1) % 2);
   };
 
   const ShowLike = () => {
@@ -18,7 +18,6 @@ export default function LikeButton() {
       return (
         <>
           <AntDesign name="like1" size={24} color="black" />
-          <Text style={styles.text}>{likes.toString()}</Text>
         </>
       );
     }
