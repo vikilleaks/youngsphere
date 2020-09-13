@@ -8,14 +8,11 @@ const Stack = createStackNavigator();
 
 const QuizNavigator = ({ route }) => {
   const { link } = route.params;
-  console.log(link);
   return (
     <Stack.Navigator>
-      <Stack.Screen
-        name="BottomModal"
-        component={BottomModal}
-        options={{ headerShown: false }}
-      />
+      <Stack.Screen name="BottomModal" options={{ headerShown: false }}>
+        {(otherProps) => <BottomModal {...otherProps} link={link} />}
+      </Stack.Screen>
       <Stack.Screen
         name="QuizIndex"
         component={QuizIndex}

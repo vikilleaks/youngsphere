@@ -5,6 +5,7 @@ import * as Yup from "yup";
 // easy import using index.js
 import { AppForm, AppFormField, SubmitButton } from "../components/forms";
 import Screen from "../components/Screen";
+import api from "../config/api";
 
 // Define it outside the function as we don't want it to be defined again as our function is re-rendered
 const validationSchema = Yup.object().shape({
@@ -38,7 +39,7 @@ const userLogin = (values) => {
       headers: myHeaders,
       body: raw,
     };
-    fetch("https://youngsphere.herokuapp.com/api/v1/sign_in", requestOptions)
+    fetch(api.SIGN_IN, requestOptions)
       .then((response) => {
         console.log(response.headers.get("Authorization"));
         onValueChange(STORAGE_KEY, response.headers.get("Authorization"));

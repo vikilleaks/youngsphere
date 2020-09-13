@@ -12,6 +12,7 @@ import {
 import ScenarioCard from "../components/search/ScenarioCard";
 import ItemSeperator from "../components/search/ItemSeparator";
 import routes from "../components/navigation/routes";
+import api from "../config/api";
 
 export default class App extends Component {
   constructor(props) {
@@ -22,7 +23,7 @@ export default class App extends Component {
   }
 
   handleOnPress = (link) => {
-    this.props.navigation.navigate(routes.BOTTOM, { link });
+    this.props.navigation.navigate(routes.QUIZ_NAV, { link });
   };
 
   componentDidMount() {
@@ -31,10 +32,7 @@ export default class App extends Component {
       method: "GET",
       headers: myHeaders,
     };
-    return fetch(
-      "https://youngsphere.herokuapp.com/api/v1/scenarios",
-      requestOptions
-    )
+    return fetch(api.SCENARIOS, requestOptions)
       .then((response) => response.json())
       .then((result) => {
         this.setState(

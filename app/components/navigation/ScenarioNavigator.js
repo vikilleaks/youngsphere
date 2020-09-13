@@ -14,7 +14,7 @@ const ScenarioNavigator = () => (
       options={{ headerShown: false }}
     />
     <Stack.Screen
-      name="Bottom"
+      name="QuizNav"
       component={QuizNavigator}
       options={{ headerShown: false }}
     />

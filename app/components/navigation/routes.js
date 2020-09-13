@@ -2,6 +2,6 @@
 export default Object.freeze({
   LOGIN: "Login",
   REGISTER: "Register",
-  BOTTOM: "Bottom",
-  QUIZIDX: "QuizIndex",
+  QUIZ_NAV: "QuizNav",
+  QUIZ_INDEX: "QuizIndex",
 });

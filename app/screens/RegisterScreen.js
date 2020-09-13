@@ -8,6 +8,7 @@ import {
   SubmitButton,
 } from "../components/forms";
 import Screen from "../components/Screen";
+import api from "../config/api";
 
 const validationSchema = Yup.object().shape({
   username: Yup.string().required().min(1).label("Username"),
@@ -42,7 +43,7 @@ const userSignup = (values) => {
       headers: myHeaders,
       body: raw,
     };
-    fetch("https://youngsphere.herokuapp.com/api/v1/account", requestOptions)
+    fetch(api.CREATE_USER, requestOptions)
       .then((response) => response.json())
       .then((result) => {
         console.log(result);

@@ -96,7 +96,7 @@ export default class BottomModal extends Component {
       <>
         <WebView
           source={{
-            uri: "https://leetcode.com/explore/",
+            uri: this.props.link,
           }}
           style={styles.web}
         />
@@ -113,7 +113,7 @@ export default class BottomModal extends Component {
             <LikeButton />
             <AppButton
               title="Quiz"
-              onPress={() => this.props.navigation.navigate(routes.QUIZIDX)}
+              onPress={() => this.props.navigation.navigate(routes.QUIZ_INDEX)}
               style={styles.button}
             />
           </View>
@@ -137,6 +137,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: "row",
+    justifyContent: "center",
   },
   container: {
     flex: 1,
@@ -148,12 +149,13 @@ const styles = StyleSheet.create({
     position: "absolute",
     right: 0,
     backgroundColor: "skyblue",
-    alignItems: "center",
+    flex: 1,
   },
   dragHandle: {
     fontSize: 22,
     color: "#707070",
     height: 60,
+    paddingLeft: Dimensions.get("window").width / 2 - 5,
   },
   instructions: {
     textAlign: "center",
