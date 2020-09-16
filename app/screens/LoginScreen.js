@@ -6,6 +6,7 @@ import * as Yup from "yup";
 import { AppForm, AppFormField, SubmitButton } from "../components/forms";
 import Screen from "../components/Screen";
 import api from "../config/api";
+import routes from "../components/navigation/routes";
 
 // Define it outside the function as we don't want it to be defined again as our function is re-rendered
 const validationSchema = Yup.object().shape({
@@ -13,8 +14,6 @@ const validationSchema = Yup.object().shape({
   email: Yup.string().required().email().label("Email"),
   password: Yup.string().required().min(8).label("Password"),
 });
-
-let STORAGE_KEY = "id_token";
 
 const onValueChange = async (item, selectedValue) => {
   try {
@@ -24,7 +23,7 @@ const onValueChange = async (item, selectedValue) => {
   }
 };
 
-const userLogin = (values) => {
+const userLogin = (values, navigation) => {
   if (values) {
     console.log(values);
     var myHeaders = new Headers();
@@ -42,14 +41,16 @@ const userLogin = (values) => {
     fetch(api.SIGN_IN, requestOptions)
       .then((response) => {
         console.log(response.headers.get("Authorization"));
-        onValueChange(STORAGE_KEY, response.headers.get("Authorization"));
+        onValueChange("auth_token", response.headers.get("Authorization"));
+        Alert.alert("Login Success!");
+        navigation.navigate(routes.USER);
       })
       .catch((error) => console.log("error", error));
   }
 };
 
 //login page
-export default function LoginScreen() {
+export default function LoginScreen({ navigation }) {
   return (
     <Screen style={styles.container}>
       <Image
@@ -61,7 +62,7 @@ export default function LoginScreen() {
           email: "",
           password: "",
         }}
-        onSubmit={(values) => userLogin(values)}
+        onSubmit={(values) => userLogin(values, navigation)}
         validationSchema={validationSchema}
       >
         {/* children of AppForm */}

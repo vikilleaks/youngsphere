@@ -6,6 +6,7 @@ import {
   PanResponder,
   Animated,
   View,
+  AsyncStorage,
 } from "react-native";
 
 import CommentsScreen from "./CommentsScreen";
@@ -15,6 +16,7 @@ import LikeButton from "./LikeButton";
 import AppButton from "../AppButton";
 import colors from "../../config/colors";
 import routes from "../navigation/routes";
+import AppTextInput from "../AppTextInput";
 
 export default class BottomModal extends Component {
   constructor(props) {
@@ -23,6 +25,7 @@ export default class BottomModal extends Component {
     const { height, width } = Dimensions.get("screen");
     const initialPosition = { x: 0, y: height - 125 };
     const position = new Animated.ValueXY(initialPosition);
+    const text = "";
 
     const parentResponder = PanResponder.create({
       onMoveShouldSetPanResponderCapture: (e, gestureState) => {
@@ -90,6 +93,30 @@ export default class BottomModal extends Component {
     return contentOffset.y == 0;
   }
 
+  AddComment = (userInput) => {
+    var myHeaders = new Headers();
+    myHeaders.append(
+      "Authorization",
+      "Bearer " + AsyncStorage.getItem("auth_token")
+    );
+    myHeaders.append("Content-Type", "application/json");
+    var raw = JSON.stringify({ body: userInput });
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+    };
+    fetch(
+      "http://youngsphere.herokuapp.com/api/v1/scenarios/" +
+        this.props.id +
+        "/comments",
+      requestOptions
+    )
+      .then((response) => response.json())
+      .then((result) => console.log(result))
+      .catch((error) => console.log("error", error));
+  };
+
   render() {
     const { height } = Dimensions.get("window");
     return (
@@ -110,14 +137,21 @@ export default class BottomModal extends Component {
         >
           <Text style={styles.dragHandle}>=</Text>
           <View style={styles.buttonContainer}>
-            <LikeButton />
+            <LikeButton id={this.props.id} />
             <AppButton
               title="Quiz"
               onPress={() => this.props.navigation.navigate(routes.QUIZ_INDEX)}
               style={styles.button}
             />
           </View>
-          <CommentsScreen />
+          <AppTextInput onChangeText={(text) => (this.text = text)} />
+          <AppButton
+            title="Comment"
+            style={styles.comment}
+            onPress={() => this.AddComment(this.text)}
+          />
+          <CommentsScreen id={this.props.id} />
+          <View style={styles.footer} />
         </Animated.View>
       </>
     );
@@ -139,6 +173,16 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
   },
+  comment: {
+    backgroundColor: colors.primary,
+    borderRadius: 25,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 15,
+    width: "40%",
+    marginLeft: 120,
+    flexDirection: "row",
+  },
   container: {
     flex: 1,
     justifyContent: "center",
@@ -156,6 +200,9 @@ const styles = StyleSheet.create({
     color: "#707070",
     height: 60,
     paddingLeft: Dimensions.get("window").width / 2 - 5,
+  },
+  footer: {
+    height: 50,
   },
   instructions: {
     textAlign: "center",

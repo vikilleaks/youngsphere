@@ -4,4 +4,5 @@ export default Object.freeze({
   REGISTER: "Register",
   QUIZ_NAV: "QuizNav",
   QUIZ_INDEX: "QuizIndex",
+  USER: "UserNavigator",
 });

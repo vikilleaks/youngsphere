@@ -5,7 +5,6 @@ import colors from "../../config/colors";
 import AppText from "../AppText";
 
 export default function ScenarioCard({ title, subTitle, image, onPress }) {
-  console.log(image);
   return (
     <TouchableHighlight underlayColor={colors.light} onPress={onPress}>
       <View style={styles.card}>

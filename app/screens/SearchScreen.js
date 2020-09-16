@@ -22,8 +22,8 @@ export default class App extends Component {
     this.arrayholder = [];
   }
 
-  handleOnPress = (link) => {
-    this.props.navigation.navigate(routes.QUIZ_NAV, { link });
+  handleOnPress = (id, link) => {
+    this.props.navigation.navigate(routes.QUIZ_NAV, { id, link });
   };
 
   componentDidMount() {
@@ -96,7 +96,7 @@ export default class App extends Component {
               subTitle={item.attributes.uploader_name}
               image={item.attributes.avatar_url}
               onPress={() =>
-                this.handleOnPress(item.attributes.link_to_scenario)
+                this.handleOnPress(item.id, item.attributes.link_to_scenario)
               }
             />
           )}

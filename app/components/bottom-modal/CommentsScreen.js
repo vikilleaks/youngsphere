@@ -1,77 +1,51 @@
-import React from "react";
-import { StyleSheet, Text, View, FlatList } from "react-native";
+import React, { useState, useEffect } from "react";
+import { StyleSheet, FlatList, AsyncStorage } from "react-native";
 
 import ListItem from "../ListItem";
 import ListItemSeparator from "../ListItemSeparator";
 
-const messages = [
-  {
-    id: 1,
-    title: "C1",
-    desciption: "How you doing?",
-    image: require("../../assets/youngspherelogo.jpeg"),
-  },
-  {
-    id: 2,
-    title: "C2",
-    desciption: "How you doing?",
-    image: require("../../assets/youngspherelogo.jpeg"),
-  },
-  {
-    id: 3,
-    title: "C3",
-    desciption: "How you doing?",
-    image: require("../../assets/youngspherelogo.jpeg"),
-  },
-  {
-    id: 4,
-    title: "C4",
-    desciption: "How you doing?",
-    image: require("../../assets/youngspherelogo.jpeg"),
-  },
-  {
-    id: 5,
-    title: "C5",
-    desciption: "How you doing?",
-    image: require("../../assets/youngspherelogo.jpeg"),
-  },
-  {
-    id: 6,
-    title: "C6",
-    desciption: "How you doing?",
-    image: require("../../assets/youngspherelogo.jpeg"),
-  },
-  {
-    id: 7,
-    title: "C7",
-    desciption: "How you doing?",
-    image: require("../../assets/youngspherelogo.jpeg"),
-  },
-  {
-    id: 8,
-    title: "C8",
-    desciption: "How you doing?",
-    image: require("../../assets/youngspherelogo.jpeg"),
-  },
-  {
-    id: 9,
-    title: "C9",
-    desciption: "How you doing?",
-    image: require("../../assets/youngspherelogo.jpeg"),
-  },
-];
+const img = require("../../assets/youngspherelogo.jpeg");
 
-export default function CommentsScreen({ style }) {
+export default function CommentsScreen({ style, id }) {
+  const [arrayholder, setArrayholder] = useState([]);
+  const [ID, setID] = useState(id);
+
+  const NumComments = () => {
+    var myHeaders = new Headers();
+    myHeaders.append(
+      "Authorization",
+      "Bearer " + AsyncStorage.getItem("auth_token")
+    );
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+    };
+    fetch(
+      "http://youngsphere.herokuapp.com/api/v1/scenarios/" + ID,
+      requestOptions
+    )
+      .then((response) => response.json())
+      .then((result) => {
+        setArrayholder(result.included);
+        console.log(result.included);
+      })
+      .catch((error) => console.log("error", error));
+  };
+
+  useEffect(() => {
+    NumComments();
+  }, []);
+
   return (
     <FlatList
       style={style}
-      data={messages}
+      data={arrayholder}
       keyExtractor={(message) => message.id.toString()}
       renderItem={({ item }) => (
         <ListItem
-          title={item.title}
-          subTitle={item.desciption}
-          image={item.image}
+          title={item.attributes.id}
+          subTitle={item.attributes.body}
+          image={img}
         />
       )}
       ItemSeparatorComponent={ListItemSeparator}

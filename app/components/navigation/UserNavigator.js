@@ -8,7 +8,7 @@ import ScenarioNavigator from "./ScenarioNavigator";
 
 const Tab = createBottomTabNavigator();
 
-const AppNavigator = () => (
+const UserNavigator = () => (
   <Tab.Navigator>
     <Tab.Screen
       name="Search"
@@ -40,4 +40,4 @@ const AppNavigator = () => (
   </Tab.Navigator>
 );
 
-export default AppNavigator;
+export default UserNavigator;
