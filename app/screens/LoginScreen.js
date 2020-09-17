@@ -41,9 +41,18 @@ const userLogin = (values) => {
     fetch(api.SIGN_IN, requestOptions)
       .then((response) => {
         console.log(response.headers.get("Authorization"));
-        onValueChange("auth_token", response.headers.get("Authorization"));
-        Alert.alert("Login Success!");
-        Actions.UserPage();
+        switch (response.status) {
+          case 200:
+            onValueChange("auth_token", response.headers.get("Authorization"));
+            Alert.alert("Login Success!");
+            Actions.UserPage();
+            break;
+          case 401:
+            Alert.alert("Login Failed!");
+            break;
+          default:
+            Alert.alert("Login Failed!");
+        }
       })
       .catch((error) => console.log("error", error));
   }
