@@ -13,10 +13,9 @@ import CommentsScreen from "./CommentsScreen";
 import { WebView } from "react-native-webview";
 import Constants from "expo-constants";
 import LikeButton from "./LikeButton";
-import AppButton from "../AppButton";
 import colors from "../../config/colors";
 import routes from "../navigation/routes";
-import AppTextInput from "../AppTextInput";
+import AppButton from "../AppButton";
 
 export default class BottomModal extends Component {
   constructor(props) {
@@ -25,7 +24,6 @@ export default class BottomModal extends Component {
     const { height, width } = Dimensions.get("screen");
     const initialPosition = { x: 0, y: height - 125 };
     const position = new Animated.ValueXY(initialPosition);
-    const text = "";
 
     const parentResponder = PanResponder.create({
       onMoveShouldSetPanResponderCapture: (e, gestureState) => {
@@ -93,30 +91,6 @@ export default class BottomModal extends Component {
     return contentOffset.y == 0;
   }
 
-  AddComment = (userInput) => {
-    var myHeaders = new Headers();
-    myHeaders.append(
-      "Authorization",
-      "Bearer " + AsyncStorage.getItem("auth_token")
-    );
-    myHeaders.append("Content-Type", "application/json");
-    var raw = JSON.stringify({ body: userInput });
-    var requestOptions = {
-      method: "POST",
-      headers: myHeaders,
-      body: raw,
-    };
-    fetch(
-      "http://youngsphere.herokuapp.com/api/v1/scenarios/" +
-        this.props.id +
-        "/comments",
-      requestOptions
-    )
-      .then((response) => response.json())
-      .then((result) => console.log(result))
-      .catch((error) => console.log("error", error));
-  };
-
   render() {
     const { height } = Dimensions.get("window");
     return (
@@ -144,12 +118,6 @@ export default class BottomModal extends Component {
               style={styles.button}
             />
           </View>
-          <AppTextInput onChangeText={(text) => (this.text = text)} />
-          <AppButton
-            title="Comment"
-            style={styles.comment}
-            onPress={() => this.AddComment(this.text)}
-          />
           <CommentsScreen id={this.props.id} />
           <View style={styles.footer} />
         </Animated.View>

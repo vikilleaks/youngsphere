@@ -4,33 +4,30 @@ import { createStackNavigator } from "@react-navigation/stack";
 import LoginScreen from "../../screens/LoginScreen";
 import RegisterScreen from "../../screens/RegisterScreen";
 import WelcomeScreen from "../../screens/WelcomeScreen";
-import UserNavigator from "./UserNavigator";
+import { NavigationContainer } from "@react-navigation/native";
 
 const Stack = createStackNavigator();
 
 const AuthNavigator = () => (
-  <Stack.Navigator>
-    <Stack.Screen
-      name="Welcome"
-      component={WelcomeScreen}
-      options={{ headerShown: false }}
-    />
-    <Stack.Screen
-      name="Login"
-      component={LoginScreen}
-      options={{ headerShown: false }}
-    />
-    <Stack.Screen
-      name="Register"
-      component={RegisterScreen}
-      options={{ headerShown: false }}
-    />
-    <Stack.Screen
-      name="UserNavigator"
-      component={UserNavigator}
-      options={{ headerShown: false }}
-    />
-  </Stack.Navigator>
+  <NavigationContainer independent={true}>
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Welcome"
+        component={WelcomeScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Login"
+        component={LoginScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Register"
+        component={RegisterScreen}
+        options={{ headerShown: false }}
+      />
+    </Stack.Navigator>
+  </NavigationContainer>
 );
 
 export default AuthNavigator;

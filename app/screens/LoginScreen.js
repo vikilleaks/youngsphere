@@ -1,12 +1,12 @@
 import React from "react";
 import { StyleSheet, Image, AsyncStorage, Alert } from "react-native";
 import * as Yup from "yup";
+import { Actions } from "react-native-router-flux";
 
 // easy import using index.js
 import { AppForm, AppFormField, SubmitButton } from "../components/forms";
 import Screen from "../components/Screen";
 import api from "../config/api";
-import routes from "../components/navigation/routes";
 
 // Define it outside the function as we don't want it to be defined again as our function is re-rendered
 const validationSchema = Yup.object().shape({
@@ -23,7 +23,7 @@ const onValueChange = async (item, selectedValue) => {
   }
 };
 
-const userLogin = (values, navigation) => {
+const userLogin = (values) => {
   if (values) {
     console.log(values);
     var myHeaders = new Headers();
@@ -43,14 +43,14 @@ const userLogin = (values, navigation) => {
         console.log(response.headers.get("Authorization"));
         onValueChange("auth_token", response.headers.get("Authorization"));
         Alert.alert("Login Success!");
-        navigation.navigate(routes.USER);
+        Actions.UserPage();
       })
       .catch((error) => console.log("error", error));
   }
 };
 
 //login page
-export default function LoginScreen({ navigation }) {
+export default function LoginScreen() {
   return (
     <Screen style={styles.container}>
       <Image
@@ -62,7 +62,7 @@ export default function LoginScreen({ navigation }) {
           email: "",
           password: "",
         }}
-        onSubmit={(values) => userLogin(values, navigation)}
+        onSubmit={(values) => userLogin(values)}
         validationSchema={validationSchema}
       >
         {/* children of AppForm */}

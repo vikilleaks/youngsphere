@@ -24,7 +24,7 @@ export default function LikeButton({ id }) {
       body: raw,
     };
     fetch(
-      "http://youngsphere.herokuapp.com/api/v1/scenarios/1/reactions",
+      "http://youngsphere.herokuapp.com/api/v1/scenarios/" + ID + "/reactions",
       requestOptions
     )
       .then((response) => response.json())
