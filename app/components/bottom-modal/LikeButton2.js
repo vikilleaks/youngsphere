@@ -8,28 +8,19 @@ export default class LikeButton2 extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      numLikes: 0,
-      id: "",
-      userLiked: false,
+      likes: 3,
+      boolUserLiked: false,
+      numLikes: this.props.numLikes,
+      id: this.props.id,
+      userLiked: this.props.userLiked,
       isloading: true,
     };
   }
 
-  tick = () => {
-    if (this.state.isloading) {
-      setInterval(() => {
-        this.setState({
-          numLikes: this.props.numLikes,
-          id: this.props.id,
-          userLiked: this.props.userLiked,
-          isloading: false,
-        });
-      });
-    }
-  };
-
   componentDidMount() {
-    this.tick();
+    setInterval(() => {
+      this.setState((state, props) => ({ ...props, isloading: false }));
+    });
   }
 
   _getAuthToken = async () => {
@@ -65,7 +56,6 @@ export default class LikeButton2 extends Component {
           if (this.state.numLikes > 0)
             this.setState((state, props) => ({ numLikes: state.numLikes - 1 }));
         }
-        this.NumLikes();
       })
       .catch((error) => console.log("error", error));
   };

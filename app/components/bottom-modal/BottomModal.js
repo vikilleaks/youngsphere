@@ -1,4 +1,4 @@
-import React, { Component, useContext } from "react";
+import React, { Component } from "react";
 import {
   StyleSheet,
   Text,
@@ -12,7 +12,7 @@ import {
 import CommentsScreen from "./CommentsScreen";
 import { WebView } from "react-native-webview";
 import Constants from "expo-constants";
-import LikeButton from "./LikeButton";
+import LikeButton2 from "./LikeButton2";
 import colors from "../../config/colors";
 import routes from "../navigation/routes";
 import AppButton from "../AppButton";
@@ -67,6 +67,9 @@ export default class BottomModal extends Component {
     this.offset = 0;
     this.parentResponder = parentResponder;
     this.state = { position, toTop: false };
+    this.likes = 0;
+    this.comments = [];
+    this.userLiked = false;
   }
 
   snapToTop = () => {
@@ -91,8 +94,39 @@ export default class BottomModal extends Component {
     return contentOffset.y == 0;
   }
 
+  _getAuthToken = async () => {
+    var value = await AsyncStorage.getItem("auth_token");
+    return value;
+  };
+
+  FetchLikesComments = async () => {
+    var myHeaders = new Headers();
+    myHeaders.append("Authorization", await this._getAuthToken());
+    var requestOptions = {
+      method: "GET",
+      headers: myHeaders,
+    };
+    fetch(
+      "http://youngsphere.herokuapp.com/api/v1/scenarios/" + this.props.id,
+      requestOptions
+    )
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        console.log(result.data.attributes.current_user_like);
+        this.userLiked = result.data.attributes.current_user_like;
+        this.likes = result.data.attributes.num_of_likes;
+        this.comments.push(result.included);
+      })
+      .catch((error) => console.log("error", error));
+  };
+
+  componentDidMount() {
+    this.FetchLikesComments();
+  }
+
   render() {
-    const { height } = Dimensions.get("window");
+    const { height, width } = Dimensions.get("window");
     return (
       <>
         <WebView
@@ -111,14 +145,18 @@ export default class BottomModal extends Component {
         >
           <Text style={styles.dragHandle}>=</Text>
           <View style={styles.buttonContainer}>
-            <LikeButton id={this.props.id} />
+            <LikeButton2
+              id={this.props.id}
+              numLikes={this.likes}
+              userLiked={this.userLiked}
+            />
             <AppButton
               title="Quiz"
               onPress={() => this.props.navigation.navigate(routes.QUIZ_INDEX)}
               style={styles.button}
             />
           </View>
-          <CommentsScreen id={this.props.id} />
+          <CommentsScreen id={this.props.id} numComments={this.comments} />
           <View style={styles.footer} />
         </Animated.View>
       </>

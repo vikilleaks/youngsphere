@@ -35,6 +35,7 @@ export default class App extends Component {
     return fetch(api.SCENARIOS, requestOptions)
       .then((response) => response.json())
       .then((result) => {
+        // console.log(result);
         this.setState(
           {
             isLoading: false,

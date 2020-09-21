@@ -13,12 +13,14 @@ export default function CommentsScreen({ style, id }) {
   const [ID, setID] = useState(id);
   const [text, setText] = useState("");
 
-  const NumComments = () => {
+  const _getAuthToken = async () => {
+    var value = await AsyncStorage.getItem("auth_token");
+    return value;
+  };
+
+  const NumComments = async () => {
     var myHeaders = new Headers();
-    myHeaders.append(
-      "Authorization",
-      "Bearer " + AsyncStorage.getItem("auth_token")
-    );
+    myHeaders.append("Authorization", await _getAuthToken());
     var requestOptions = {
       method: "GET",
       headers: myHeaders,
@@ -30,21 +32,13 @@ export default function CommentsScreen({ style, id }) {
       .then((response) => response.json())
       .then((result) => {
         setArrayholder(result.included);
-        console.log(result.included);
       })
       .catch((error) => console.log("error", error));
   };
 
-  useEffect(() => {
-    NumComments();
-  }, []);
-
-  const AddComment = (userInput) => {
+  const AddComment = async (userInput) => {
     var myHeaders = new Headers();
-    myHeaders.append(
-      "Authorization",
-      "Bearer " + AsyncStorage.getItem("auth_token")
-    );
+    myHeaders.append("Authorization", await _getAuthToken());
     myHeaders.append("Content-Type", "application/json");
     var raw = JSON.stringify({ body: userInput });
     var requestOptions = {
@@ -57,7 +51,6 @@ export default function CommentsScreen({ style, id }) {
       requestOptions
     )
       .then((response) => response.json())
-      .then((result) => console.log(result))
       .catch((error) => console.log("error", error));
   };
 
